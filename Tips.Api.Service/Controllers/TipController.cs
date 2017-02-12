@@ -10,9 +10,9 @@ namespace Tips.Api.Service.Controllers
     {
         private readonly IRepository<Tip> _tipRepository;
 
-        public TipController()
+        public TipController(IRepository<Tip> tipRepository)
         {
-            _tipRepository = new TipRepository();
+            _tipRepository = tipRepository;
         }
 
         // GET api/values
