@@ -8,9 +8,9 @@ namespace Tip.Web.Service.Controllers
         // 
         // GET: /Home/
 
-        public string Index()
+        public IActionResult Index()
         {
-            return "This is my default action...";
+            return View();
         }
 
         // 
