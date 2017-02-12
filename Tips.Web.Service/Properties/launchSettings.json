@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Tip.Web.Service": {
+    "Tips.Web.Service": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
