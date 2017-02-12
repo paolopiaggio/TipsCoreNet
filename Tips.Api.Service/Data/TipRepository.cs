@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Tips.Model;
 
 namespace Tips.Data
@@ -14,12 +15,15 @@ namespace Tips.Data
 
         public void Delete(Tip entity)
         {
-            throw new NotImplementedException();
+            if (entity == null) {
+                throw new ArgumentNullException("entity");
+            }
+            _tips.Remove(entity);
         }
 
         public Tip Get(long id)
         {
-            throw new NotImplementedException();
+            return _tips.SingleOrDefault(x=>x.Id == id);
         }
 
         public IEnumerable<Tip> GetAll()
@@ -29,12 +33,23 @@ namespace Tips.Data
 
         public void Insert(Tip entity)
         {
-            throw new NotImplementedException();
+            if (entity == null) {
+                throw new ArgumentNullException("entity");
+            }
+            _tips.Add(entity);
         }
 
         public void Update(Tip entity)
         {
-            throw new NotImplementedException();
+            if (entity == null) {
+                throw new ArgumentNullException("entity");
+            }
+            var entityToRemove = _tips.SingleOrDefault(x=>x.Id == entity.Id);
+            if(entityToRemove == null) {
+                throw new InvalidOperationException("entity not found, impossible to update");
+            }
+            _tips.Remove(entityToRemove);
+            _tips.Add(entity);
         }
     }
 }
