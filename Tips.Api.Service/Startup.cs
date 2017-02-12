@@ -3,8 +3,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 using Tips.Data;
 using Tips.Model;
+using System;
+using System.IO;
 
 namespace Tips.Api.Service
 {
@@ -27,7 +30,8 @@ namespace Tips.Api.Service
         {
             // Add framework services.
             services.AddMvc();
-            services.AddScoped<IRepository<Tip>, TipRepository>();
+            services.AddDbContext<ApiContext>(opt => opt.UseInMemoryDatabase());
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -36,7 +40,24 @@ namespace Tips.Api.Service
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            var context = app.ApplicationServices.GetService<ApiContext>();
+            AddTestData(context);
             app.UseMvc();
+        }
+
+        private static void AddTestData(ApiContext context)
+        {
+            var lines = File.ReadAllLines(@"Resources/tips.csv");
+            foreach (var line in lines)
+            {
+                var csvParts = line.Split(',');
+                context.Tips.Add(new Tip
+                {
+                    Id = long.Parse(csvParts[0]),
+                    Text = csvParts[1]
+                });
+                context.SaveChanges();
+            }
         }
     }
 }
