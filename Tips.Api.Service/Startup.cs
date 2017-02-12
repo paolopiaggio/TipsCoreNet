@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Tips.Data;
 using Tips.Model;
-using System;
 using System.IO;
 
 namespace Tips.Api.Service
