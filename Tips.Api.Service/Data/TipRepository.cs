@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Tips.Model;
 
@@ -7,11 +8,12 @@ namespace Tips.Data
 {
     public class TipRepository : IRepository<Tip>
     {
-        private readonly IList<Tip> _tips = new List<Tip>
+        private static IList<Tip> _tips;
+
+        public TipRepository()
         {
-            new Tip { Id=1, Text="maybe I Work"},
-            new Tip { Id=2, Text="maybe I Work 2"},
-        };
+            InitStaticCollection();
+        }
 
         public void Delete(Tip entity)
         {
@@ -50,6 +52,24 @@ namespace Tips.Data
             }
             _tips.Remove(entityToRemove);
             _tips.Add(entity);
+        }
+
+        private static void InitStaticCollection()
+        {
+            if (_tips == null)
+            {
+                _tips = new List<Tip>();
+                var lines = File.ReadAllLines(@"Resources/tips.csv");
+                foreach (var line in lines)
+                {
+                    var csvParts = line.Split(',');
+                    _tips.Add(new Tip
+                    {
+                        Id = long.Parse(csvParts[0]),
+                        Text = csvParts[1]
+                    });
+                }
+            }
         }
     }
 }
