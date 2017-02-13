@@ -1,24 +1,21 @@
-var myApp = angular.module('tipsApp', []);
+var myApp = angular.module('myApp', ['restangular', 'ngRoute']);
 
-angular.module('tipsApp').controller('tipsController', ['$scope', function($scope) {
-    $scope.password = '';
-    $scope.strength = 'not evaluated';
-    $scope.grade = function () {
-        var size = $scope.password.length;
-        if (size > 8) {
-            $scope.strength = 'strong';
-        } else if (size > 3) {
-            $scope.strength = 'medium';
-        } else {
-            $scope.strength = 'weak';
-        }
-    };
+myApp.config(function($routeProvider, RestangularProvider) {
+    RestangularProvider.setBaseUrl('http://localhost:5000/api/');
 
-    $scope.test = function(){
-        console.log('qui');
-    }
+    $routeProvider
+        .when('/', {
+            controller: 'ShowTipController',
+            templateUrl: 'showTip.html'
+        })
+        .otherwise({
+            redirectTo: '/'
+        });
+});
 
-    $scope.$watch('password.length', function (newValue, oldValue) {
-        $scope.grade();
-    });
+// Controller for show a tip
+myApp.controller('ShowTipController', ['$scope', 'Restangular', function($scope, Restangular) {
+    $scope.tips = Restangular.all("tips").getList().then(function(tips){
+        $scope.tipToShow = tips[Math.floor(Math.random() * tips.length)];
+    })
 }]);
