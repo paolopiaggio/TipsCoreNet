@@ -1,10 +1,12 @@
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Tips.Data;
 using Tips.Model;
 
 namespace Tips.Api.Service.Controllers
 {
+    [EnableCors("AllowSpecificOrigin")]
     [Route("api/tips")]
     public class TipController : Controller
     {
