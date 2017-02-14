@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Tips.Data.Mapping;
 using Tips.Model;
 
 namespace Tips.Data
@@ -10,5 +11,10 @@ namespace Tips.Data
         }
  
         public DbSet<Tip> Tips { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder) {
+            base.OnModelCreating(modelBuilder);
+            new TipMap(modelBuilder.Entity<Tip>());
+        }
     }
 }
+

@@ -1,6 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Tips.Model;
 
@@ -42,6 +42,7 @@ namespace Tips.Data
                 throw new ArgumentNullException("entity");
             }
             _entities.Add(entity);
+            _context.SaveChanges();
         }
 
         public void Update(T entity)

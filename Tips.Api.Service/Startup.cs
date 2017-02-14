@@ -30,7 +30,11 @@ namespace Tips.Api.Service
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowSpecificOrigin",
-                    builder => builder.WithOrigins("http://localhost:8080"));
+                    // builder => builder.WithOrigins("http://localhost:8080"));
+                    builder => builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
             });
 
             // Add framework services.

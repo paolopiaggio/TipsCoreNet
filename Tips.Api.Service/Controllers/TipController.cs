@@ -17,7 +17,7 @@ namespace Tips.Api.Service.Controllers
             _tipRepository = tipRepository;
         }
 
-        // GET api/values
+        // GET api/tips
         [HttpGet]
         public IEnumerable<Tip> Get()
         {
@@ -25,17 +25,18 @@ namespace Tips.Api.Service.Controllers
             return tips;
         }
 
-        // GET api/values/5
+        // GET api/tips/5
         [HttpGet("{id}")]
         public string Get(int id)
         {
             return "value";
         }
 
-        // POST api/values
+        // POST api/tips
         [HttpPost]
-        public void Post([FromBody]string value)
+        public void Post([FromBody]Tip tip)
         {
+            _tipRepository.Insert(tip);
         }
 
         // PUT api/values/5

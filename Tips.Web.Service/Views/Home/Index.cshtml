@@ -18,11 +18,15 @@
             <a href="#/show-me-another-tip" id="tip" rel="nofollow" style="display: table-cell;">{{tipToShow.text}}</a>
         </div>
     </script>
+    <script type="text/ng-template" id="addTip.html">
+        <label for="tipText">Tip's text: </label>
+        <input type="text" name="tipText" ng-model="tipText"><br>
+        <button href="#" ng-click="addTip()" >Add tip</button>
+    </script>
     <div class="github">
         <!-- Place this tag where you want the button to render. -->
         <a class="github-button" href="https://github.com/paolopiaggio/TipsCoreNet" data-icon="octicon-star" data-style="mega" data-count-href="/paolopiaggio/TipsCoreNet/stargazers" data-count-api="/repos/paolopiaggio/TipsCoreNet#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star paolopiaggio/TipsCoreNet on GitHub">Star</a>
     </div>
     <script src="~/js/app.js"></script>
 </body>
-
 </html>
