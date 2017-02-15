@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Tips.Data;
@@ -18,37 +18,66 @@ namespace Tips.Api.Service.Controllers
         }
 
         // GET api/tips
-        [HttpGet]
-        public IEnumerable<Tip> Get()
+        [HttpGet(Name = "GetAllTips")]
+        public IActionResult Get()
         {
             var tips = _tipRepository.GetAll();
-            return tips;
+            return Ok(tips);
         }
 
         // GET api/tips/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{id}", Name="GetTip")]
+        public IActionResult Get(long id)
         {
-            return "value";
+            var tip = _tipRepository.Get(id);
+            if (tip == null)
+            {
+                return NotFound();
+            }
+            return Ok(tip);
         }
 
         // POST api/tips
-        [HttpPost]
-        public void Post([FromBody]Tip tip)
+        [HttpPost(Name="CreateTip")]
+        public IActionResult Post([FromBody]Tip tip)
         {
+            if(tip.Id!=0)
+            {
+                throw new InvalidOperationException("id > 0");
+            }
+            tip.Id = _tipRepository.GetMaxId()+1;
             _tipRepository.Insert(tip);
+            return this.CreatedAtRoute("GetTip", new { controller = "Tip", id = tip.Id }, tip);
         }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        // PUT api/tips/5
+        [HttpPut("{id}", Name="UpdateTip")]
+        public IActionResult Put(long id, [FromBody]Tip tip)
         {
+            if (tip.Id != id)
+            {
+                return BadRequest();
+            }
+            if (_tipRepository.Get(id) == null)
+            {
+                return NotFound();
+            }
+
+            _tipRepository.Update(tip);
+            return new NoContentResult();
         }
 
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        // DELETE api/tips/5
+        [HttpDelete("{id}", Name="DeleteTip")]
+        public IActionResult Delete(long id)
         {
+            var tipToDelete = _tipRepository.Get(id);
+            if(tipToDelete == null)
+            {
+                return NotFound();
+            }
+            _tipRepository.Delete(tipToDelete);
+            return Ok();
         }
     }
 }

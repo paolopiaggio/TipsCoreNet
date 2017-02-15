@@ -50,7 +50,18 @@ namespace Tips.Data
             if (entity == null) {
                 throw new ArgumentNullException("entity");
             }
-            _context.SaveChanges();
+            var test = _entities.SingleOrDefault(x=>x.Id == entity.Id);
+            if(test != null)
+            {
+                _context.Entry(test).State = EntityState.Detached;
+                _context.Entry(entity).State = EntityState.Modified;
+                _context.SaveChanges();
+            }
+        }
+
+        public long GetMaxId()
+        {
+            return _entities.Max(x=>x.Id);
         }
     }
 }
