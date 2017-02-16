@@ -41,10 +41,15 @@ namespace Tips.Api.Service.Controllers
         [HttpPost(Name="CreateTip")]
         public IActionResult Post([FromBody]Tip tip)
         {
-            if(tip.Id!=0)
+            if(!tip.IsValid())
+            {
+                return BadRequest("this doesn not seem to be a good tip :(");
+            }
+            if(tip.Id != 0)
             {
                 throw new InvalidOperationException("id > 0");
             }
+            
             tip.Id = _tipRepository.GetMaxId()+1;
             _tipRepository.Insert(tip);
             return this.CreatedAtRoute("GetTip", new { controller = "Tip", id = tip.Id }, tip);
@@ -54,6 +59,10 @@ namespace Tips.Api.Service.Controllers
         [HttpPut("{id}", Name="UpdateTip")]
         public IActionResult Put(long id, [FromBody]Tip tip)
         {
+            if(!tip.IsValid())
+            {
+                return BadRequest("this doesn not seem to be a good tip :(");
+            }
             if (tip.Id != id)
             {
                 return BadRequest();
@@ -78,6 +87,18 @@ namespace Tips.Api.Service.Controllers
             }
             _tipRepository.Delete(tipToDelete);
             return Ok();
+        }
+    }
+
+    public static class TipExtenstion
+    {
+        public static bool IsValid(this Tip tip)
+        {
+            if(tip == null)
+            {
+                return false;
+            }
+            return !string.IsNullOrEmpty(tip.Text);
         }
     }
 }
