@@ -8,6 +8,7 @@
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/restangular/1.5.1/restangular.js"></script>
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <link rel="stylesheet" type="text/css" href="/css/style.css" />
+    <link rel="stylesheet" href="http://getbootstrap.com/2.3.2/assets/css/bootstrap.css"/>
     <title>Maybe...</title>
 </head>
 
@@ -18,10 +19,24 @@
             <a href="#/show-me-another-tip" id="tip" rel="nofollow" style="display: table-cell;">{{tipToShow.text}}</a>
         </div>
     </script>
-    <script type="text/ng-template" id="addTip.html">
-        <label for="tipText">Tip's text: </label>
-        <input type="text" name="tipText" ng-model="tipText"><br>
-        <button href="#" ng-click="addTip()" >Add tip</button>
+    <script type="text/ng-template" id="listTip.html">
+        <input type="text" ng-model="search" class="search-query" placeholder="Search">
+        <p>Add new tip</p>
+        <a href="#/admin/add"><i class="icon-plus-sign"></i></a>
+        <div ng-repeat="tip in tips | filter:search | orderBy:'id'">
+            <p>{{tip.id}}|{{tip.text}}</p>
+            <a href="#/admin/edit/{{tip.id}}"><i class="icon-pencil"></i></a>
+            <a href="javascript:void(0)" ng-click="deleteTip(tip)"><i class="icon-trash"></i></a>
+        </div>
+    </script>
+    <script type="text/ng-template" id="detailTip.html">
+        <form name="myForm">
+            <label>Text</label>
+            <input type="text" name="text" ng-model="tip.text" required>
+            <span ng-show="myForm.name.$error.required" class="help-inline">Required</span>
+            <a href="#/admin" class="btn">Cancel</a>
+            <button ng-click="save()" ng-disabled="editForm.$invalid" class="btn btn-primary">Save</button>
+        </form>
     </script>
     <div class="github">
         <!-- Place this tag where you want the button to render. -->

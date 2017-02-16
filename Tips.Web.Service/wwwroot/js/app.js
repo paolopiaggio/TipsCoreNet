@@ -8,18 +8,33 @@ myApp.config(function($routeProvider, RestangularProvider) {
             controller: 'ShowTipController',
             templateUrl: 'showTip.html'
         })
+        .when('/admin/', {
+            controller: 'ListTipController',
+            templateUrl: 'listTip.html'
+        })
         .when('/admin/add', {
             controller: 'AddTipController',
-            templateUrl: 'addTip.html'
+            templateUrl: 'detailTip.html'
+        })
+        .when('/admin/edit/:tipId', {
+            controller: 'EditTipController',
+            templateUrl: 'detailTip.html',
+            resolve: {
+                tip: function (Restangular, $route) {
+                    // return a Restangular promise, the route will 
+                    // load only when the promise resolves
+                    return Restangular.one('tips', $route.current.params.tipId).get();
+                }
+            }
         })
         .otherwise({
             redirectTo: '/'
         });
 });
 
-// Controller for show a tip
+// Controller for showing a tip
 myApp.controller('ShowTipController', ['$scope', 'Restangular', function($scope, Restangular) {
-    $scope.tips = Restangular.all("tips").getList()
+    Restangular.all("tips").getList()
         .then(function(tips){
             $scope.tipToShow = tips[Math.floor(Math.random() * tips.length)];
         },
@@ -28,14 +43,41 @@ myApp.controller('ShowTipController', ['$scope', 'Restangular', function($scope,
         });
 }]);
 
-// Controller for add a tip
-myApp.controller('AddTipController', ['$scope', 'Restangular', function($scope, Restangular) {
-    $scope.tipText='';
-    $scope.addTip = function(){
-        console.log("I'd like to add the tip " + $scope.tipText);
-        Restangular.all('tips').post({text:$scope.tipText}).then(function (tip) {
-            // Reload main view when done
-            $location.path('/');
+// Controller for listing tips and deleting a tip (admin)
+myApp.controller('ListTipController', ['$scope', 'Restangular', '$location', function($scope, Restangular, $location) {
+    Restangular.all("tips").getList()
+        .then(function(tips){
+            $scope.tips = tips;
+        },
+        function(err){
+            console.log("maybe there is a problem with the tips api :-)");
         });
-    }
+    
+    $scope.deleteTip = function (tip) {
+        tip.remove().then(function () {
+            // Reload list when done
+            $location.path('/admin');
+        });
+    };
+}]);
+
+// Controller for editing a tip (admin)
+myApp.controller('EditTipController', ['$scope', 'Restangular', 'tip', '$location', function($scope, Restangular, tip, $location) {
+    var original = tip;
+    $scope.tip = Restangular.copy(original);
+    $scope.save = function () {
+        $scope.tip.put().then(function () {
+            // Reload list when done
+            $location.path('/admin');
+        });
+    };
+}]);
+
+// Controller for adding a tip (admin)
+myApp.controller('AddTipController', ['$scope', 'Restangular', '$location', function($scope, Restangular, $location) {
+    $scope.save = function () {
+        Restangular.all('tips').post($scope.tip).then(function (project) {
+        $location.path('/admin');
+    });
+  };
 }]);
