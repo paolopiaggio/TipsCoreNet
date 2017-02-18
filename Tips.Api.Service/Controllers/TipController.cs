@@ -43,7 +43,7 @@ namespace Tips.Api.Service.Controllers
         {
             if(!tip.IsValid())
             {
-                return BadRequest("this doesn not seem to be a good tip :(");
+                return BadRequest("this does not seem to be a good tip :(");
             }
             if(tip.Id != 0)
             {
