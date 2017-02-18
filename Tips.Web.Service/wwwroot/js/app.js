@@ -1,5 +1,21 @@
 var myApp = angular.module('myApp', ['restangular', 'ngRoute']);
 
+myApp.directive( 'goClick', function ( $location ) {
+  return function ( scope, element, attrs ) {
+    var path;
+
+    attrs.$observe( 'goClick', function (val) {
+      path = val;
+    });
+
+    element.bind( 'click', function () {
+      scope.$apply( function () {
+        $location.path(path);
+      });
+    });
+  };
+});
+
 myApp.config(function($routeProvider, RestangularProvider) {
     RestangularProvider.setBaseUrl('http://localhost:5000/api/');
 

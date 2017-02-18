@@ -8,35 +8,64 @@
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/restangular/1.5.1/restangular.js"></script>
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <link rel="stylesheet" type="text/css" href="/css/style.css" />
-    <link rel="stylesheet" href="http://getbootstrap.com/2.3.2/assets/css/bootstrap.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <title>Maybe...</title>
 </head>
 
 <body ng-app="myApp">
     <div ng-view></div>
     <script type="text/ng-template" id="showTip.html">
-        <div class="wrapper">
+        <div class="wrapper show-tip">
             <a href="#/show-me-another-tip" id="tip" rel="nofollow" style="display: table-cell;">{{tipToShow.text}}</a>
         </div>
     </script>
     <script type="text/ng-template" id="listTip.html">
-        <input type="text" ng-model="search" class="search-query" placeholder="Search">
-        <p>Add new tip</p>
-        <a href="#/admin/add"><i class="icon-plus-sign"></i></a>
-        <div ng-repeat="tip in tips | filter:search | orderBy:'id'">
-            <p>{{tip.id}}|{{tip.text}}</p>
-            <a href="#/admin/edit/{{tip.id}}"><i class="icon-pencil"></i></a>
-            <a href="javascript:void(0)" ng-click="deleteTip(tip)"><i class="icon-trash"></i></a>
+        <div class="wrapper list-tip">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th class="header-control" colspan="2">
+                            <button type="button" go-click="/admin/add" class="btn btn-sm btn-success form-control">
+                                <i class="glyphicon glyphicon-plus">
+                                </i>Add new tip
+                            </button>
+                        </th>
+                        <th class="header-control" colspan="2">
+                            <input placeholder="search" ng-model="search" class="input-sm form-control" type="search"/>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th st-sort="id" class="text-center">id</th>
+                        <th st-sort="text" class="text-center">tip</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="tip in tips | filter:search | orderBy:'id'">
+                    <td>{{tip.id}}</td>
+                    <td>{{tip.text}}</td>
+                    <td>
+                        <div go-click="/admin/edit/{{tip.id}}" class="cursor"><i class="glyphicon glyphicon-pencil"></i></div>
+                    </td>
+                    <td>
+                        <div ng-click="deleteTip(tip)" class="cursor"><i class="glyphicon glyphicon-trash"></i></div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
+        <div go-click="/" class="btn">Show me some tips again</div>
     </script>
     <script type="text/ng-template" id="detailTip.html">
-        <form name="myForm">
-            <label>Text</label>
-            <input type="text" name="text" ng-model="tip.text" required>
-            <span ng-show="myForm.name.$error.required" class="help-inline">Required</span>
-            <a href="#/admin" class="btn">Cancel</a>
-            <button ng-click="save()" ng-disabled="editForm.$invalid" class="btn btn-primary">Save</button>
-        </form>
+        <div class="wrapper detail-tip">
+            <form name="myForm">
+                <fieldset>
+                <input type="text" placeholder="write here your new tip" name="text" ng-model="tip.text" required>
+                <span ng-show="myForm.name.$error.required" class="help-inline">Required</span>
+                <div go-click="/admin" class="btn">Cancel</div>
+                <button ng-click="save()" ng-disabled="editForm.$invalid" class="btn btn-primary">Save</button>
+                </fieldset>
+            </form>
+        </div>
     </script>
     <div class="github">
         <!-- Place this tag where you want the button to render. -->
