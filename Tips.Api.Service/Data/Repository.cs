@@ -61,6 +61,10 @@ namespace Tips.Data
 
         public long GetMaxId()
         {
+            if (!_entities.Any())
+            {
+                return 0;
+            }
             return _entities.Max(x=>x.Id);
         }
     }
