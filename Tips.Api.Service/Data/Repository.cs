@@ -31,7 +31,7 @@ namespace Tips.Data
             return _entities.SingleOrDefault(x=>x.Id == id);
         }
 
-        public IEnumerable<T> GetAll()
+        public IQueryable<T> GetAll()
         {
             return _entities;
         }
