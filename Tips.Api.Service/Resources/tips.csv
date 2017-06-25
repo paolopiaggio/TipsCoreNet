@@ -1,2 +1,15 @@
-1,I am a tip
-2,I am a tip too
+Maybe...it's the load balancer
+Maybe...CodeDeploy is stuck on 'Download Bundle'
+Maybe...it's a DNS issue
+Maybe...it didn't scale
+Maybe...it's a temporary issue
+Maybe...it's the network that is slow
+Maybe...we hit the Google API limit
+Maybe...it's a GIT confilct
+Maybe...it's only my machine
+Maybe...AWS has some problem
+Maybe...I have to check the log
+Maybe...it's the temporary fix that is still there
+Maybe...it doesn't cope up with the load
+Maybe...I need a break
+Maybe...it's a configuration missing on the Server

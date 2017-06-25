@@ -54,13 +54,14 @@ namespace Tips.Api.Service
         private static void AddTestData(ApiContext context)
         {
             var lines = File.ReadAllLines(@"Resources/tips.csv");
+            var id = 1;
             foreach (var line in lines)
             {
                 var csvParts = line.Split(',');
                 context.Tips.Add(new Tip
                 {
-                    Id = long.Parse(csvParts[0]),
-                    Text = csvParts[1]
+                    Id = id++,
+                    Text = csvParts[0]
                 });
                 context.SaveChanges();
             }
