@@ -39,16 +39,13 @@ namespace Tips.Api.Service
 
             // Add framework services.
             services.AddMvc();
-            services.AddDbContext<ApiContext>(opt => opt.UseInMemoryDatabase());
+            services.AddDbContext<ApiContext>(opt => opt.UseInMemoryDatabase("in-memory-database"));
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-
             var context = app.ApplicationServices.GetService<ApiContext>();
             AddTestData(context);
             app.UseMvc();

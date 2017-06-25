@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Tip.Web.Service
 {
@@ -13,6 +14,12 @@ namespace Tip.Web.Service
         {
             var host = new WebHostBuilder()
                 .UseKestrel()
+                .ConfigureLogging((context, factory) =>
+                {
+                    factory.UseConfiguration(context.Configuration.GetSection("Logging"));
+                    factory.AddConsole();
+                    factory.AddDebug();
+                })
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()
