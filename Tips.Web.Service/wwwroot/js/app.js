@@ -50,13 +50,17 @@ myApp.config(function($routeProvider, RestangularProvider) {
 
 // Controller for showing a tip
 myApp.controller('ShowTipController', ['$scope', 'Restangular', function($scope, Restangular) {
-    Restangular.all("tips").getList()
+    $scope.showTip = function(){
+        Restangular.all("tips").getList()
         .then(function(tips){
             $scope.tipToShow = tips[Math.floor(Math.random() * tips.length)];
         },
         function(err){
             $scope.tipToShow = {text:"maybe there is a problem with the tips api :-)"};
         });
+    }
+
+    $scope.showTip();
 }]);
 
 // Controller for listing tips and deleting a tip (admin)
